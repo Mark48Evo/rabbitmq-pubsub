@@ -35,6 +35,7 @@ export default class RabbitMQPubSub extends EventEmitter {
 
       debug(`Received message: "${message.eventName}"`);
 
+      this.emit('*', message);
       this.emit(message.eventName, message.data, message);
     });
 
