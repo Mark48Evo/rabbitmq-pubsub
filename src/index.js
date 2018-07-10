@@ -21,7 +21,7 @@ export default class RabbitMQPubSub extends EventEmitter {
 
     this.options = options;
     this.channel = channel;
-    this.consume = options.consume || true;
+    this.consume = Object.prototype.hasOwnProperty.call(options, 'consume') ? options.consume : true;
     this.consumeQueueName = `${this.options.queueNamePrefix}.${UUIDv4()}`;
   }
 
