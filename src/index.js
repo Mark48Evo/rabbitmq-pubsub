@@ -9,6 +9,7 @@ export default class RabbitMQPubSub extends EventEmitter {
    * @typedef {object} RabbitMQPubSubOptions
    * @property {string} queueNamePrefix
    * @property {string} exchangeName
+   * @property {boolean} consume
    */
 
   /**
