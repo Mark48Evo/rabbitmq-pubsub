@@ -20,6 +20,7 @@ export default class RabbitMQPubSub extends EventEmitter {
 
     this.options = options;
     this.channel = channel;
+    this.consume = options.consume || true;
     this.consumeQueueName = `${this.options.queueNamePrefix}.${UUIDv4()}`;
   }
 
@@ -27,17 +28,20 @@ export default class RabbitMQPubSub extends EventEmitter {
     debug('Begin Setup');
 
     await this.channel.assertExchange(this.options.exchangeName, 'fanout', { durable: true });
-    await this.channel.assertQueue(this.consumeQueueName, { exclusive: true });
-    await this.channel.bindQueue(this.consumeQueueName, this.options.exchangeName, '');
 
-    this.channel.consume(this.consumeQueueName, (rawMessage) => {
-      const message = JSON.parse(rawMessage.content.toString());
+    if (this.consume) {
+      await this.channel.assertQueue(this.consumeQueueName, { exclusive: true });
+      await this.channel.bindQueue(this.consumeQueueName, this.options.exchangeName, '');
 
-      debug(`Received message: "${message.eventName}"`);
+      this.channel.consume(this.consumeQueueName, (rawMessage) => {
+        const message = JSON.parse(rawMessage.content.toString());
 
-      this.emit('*', message);
-      this.emit(message.eventName, message.data, message);
-    });
+        debug(`Received message: "${message.eventName}"`);
+
+        this.emit('*', message);
+        this.emit(message.eventName, message.data, message);
+      });
+    }
 
     debug('End Setup');
   }
