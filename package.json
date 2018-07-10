@@ -1,6 +1,6 @@
 {
   "name": "@mark48evo/rabbitmq-pubsub",
-  "version": "1.2.2",
+  "version": "1.2.3",
   "description": "A RabbitMQ PubSub library",
   "author": "Aurimas Niekis <aurimas@niekis.lt> (https://github.com/Mark48Evo)",
   "license": "MIT",
